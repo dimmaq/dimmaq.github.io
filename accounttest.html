@@ -1,0 +1,77 @@
+<html>
+   <head>
+      <meta charset="utf-8">
+      <title>
+         (Это title) Пример страницы на HTML5
+      </title>
+      <script>
+          
+const bictest = (bic, acc) => {
+    const MAGIC = '71371371371371371371371';
+    bic = '' + bic;
+    acc = '' + acc;
+    const bic3acc = bic.substr(-3) + acc;
+    if (bic3acc.length !== MAGIC.length) return false;
+    let sum = 0;
+    for (let i = 0; i < bic3acc.length; i++) {
+        let k = parseInt(bic3acc[i]) * parseInt(MAGIC[i]);
+        sum += k % 10;
+    }
+    return (sum % 10) === 0;
+};
+const genacc = (bic, acc, count) => {
+    const accStart = acc.substr(0, 14);
+    const ret = [];
+    let i = 0;
+    let z;
+    while (ret.length < count && i <= 999999) {
+        z = accStart + String(i).padStart(6, '0');
+        if (bictest(bic, z)) {
+            ret.push(z);
+        }
+        i++;
+    }
+    return ret;
+}
+
+const getacc2 = (bic, acc) => {
+    const CHECK_POS = 8;
+    const ret = '';
+    let i = 0;
+    for (let i = 0; i <= 9; i++) {
+        acc = acc.substr(0, CHECK_POS) + i + acc.substr(CHECK_POS + 1);
+        if (bictest(bic, acc)) {
+            //console.log(acc);
+            return acc;
+        }        
+    }
+    return false;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    let input_bic = document.getElementById('bic');
+    let input_fixacc = document.getElementById('fixacc');
+    let input_genacc = document.getElementById('genacc');
+    let btn_fix = document.getElementById('fix');
+    let btn_gen = document.getElementById('gen');
+    let textout =  document.getElementById('textout');
+    btn_fix.onclick = () => {
+        textout.value = getacc2(input_bic.value, input_fixacc.value);
+    }
+    btn_gen.onclick = () => {
+        textout.value = genacc(input_bic.value, input_genacc.value, 10).join("\r\n");
+    }
+
+})
+
+    </script>
+   </head>
+   <body>
+    БИК: <input id="bic" size="10" value="044525745"> <br/>
+    <input id="fixacc" size="20" value="40817810_00004000000"> <input type="button" value="FIX" id="fix"> 
+    <br/>
+    <input id="genacc" size="20" value="40817810100004______"> <input type="button" value="GEN" id="gen">
+    <br/>
+    <textarea id="textout" cols="20" rows="10"></textarea>
+</body>
+</html>
