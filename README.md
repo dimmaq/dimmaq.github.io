@@ -1,4 +1,4 @@
 # dimmaq.github.io
 
 
-/accounttest.html
+https://dimmaq.github.io/accounttest.html
